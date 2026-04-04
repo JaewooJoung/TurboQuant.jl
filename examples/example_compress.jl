@@ -50,35 +50,64 @@ function main()
     tqt_path = base * ".tqt"
     out_path = base * ".restored" * splitext(input_path)[2]
 
-    # Compress
-    println("\n--- Compressing ---")
-    compress_file(input_path, tqt_path; bit_width=bit_width, dim=dim)
+    # ── Lossless compression (default) ──
+    println("\n--- Lossless Compress ---")
+    compress_file(input_path, tqt_path; bit_width=bit_width, dim=dim, lossless=true)
 
-    # Decompress
-    println("\n--- Decompressing ---")
+    println("\n--- Lossless Decompress ---")
     decompress_file(tqt_path, out_path)
-
-    # Verify
     verify_roundtrip(input_path, out_path)
 
-    # Show file sizes
-    println("\n=== File Sizes ===")
-    orig_size = filesize(input_path)
-    comp_size = filesize(tqt_path)
-    rest_size = filesize(out_path)
-    println("Original:     $orig_size bytes")
-    println("Compressed:   $comp_size bytes  ($(round(comp_size/orig_size*100, digits=1))% of original)")
-    println("Restored:     $rest_size bytes")
+    # Clean up
+    rm(tqt_path, force=true)
+    rm(out_path, force=true)
 
-    # Try different bit-widths for comparison
-    println("\n=== Bit-width Comparison ===")
-    println("Bits | Compressed Size | Ratio  | Exact Match %")
-    println("-----|-----------------|--------|-------------")
+    # ── Bit-width comparison: lossless mode ──
+    orig_size = filesize(input_path)
+
+    println("\n\n=== Lossless Mode: Bit-width Comparison ===")
+    println("Bits | Compressed | Ratio  | TQT part | Residual part | Exact?")
+    println("-----|------------|--------|----------|---------------|-------")
     for b in [1, 2, 3, 4, 6, 8]
         tqt_tmp = base * ".tmp_b$(b).tqt"
         out_tmp = base * ".tmp_b$(b).out"
         try
-            compress_file(input_path, tqt_tmp; bit_width=b, dim=dim)
+            compress_file(input_path, tqt_tmp; bit_width=b, dim=dim, lossless=true)
+            decompress_file(tqt_tmp, out_tmp)
+
+            orig = read(input_path)
+            decomp = read(out_tmp)
+            exact = orig == decomp ? "YES" : "NO"
+
+            cs = filesize(tqt_tmp)
+            ratio = round(orig_size / cs, digits=2)
+
+            # Estimate TQT base vs residual size
+            # Header + codebook + per-vector data (Float32 norm + packed indices)
+            n_vec = (length(orig) + dim - 1) ÷ dim
+            n_centroids = 1 << b
+            packed_per_vec = cld(dim * b, 8)
+            tqt_base = 38 + 4 + n_centroids * 8 + n_vec * (4 + packed_per_vec)
+            residual_part = cs - tqt_base
+
+            println("  $b   | $(lpad(cs, 10)) | $(lpad(ratio, 5))× | $(lpad(tqt_base, 8)) | $(lpad(residual_part, 13)) | $exact")
+        catch e
+            println("  $b   | error: $e")
+        finally
+            rm(tqt_tmp, force=true)
+            rm(out_tmp, force=true)
+        end
+    end
+
+    # ── Lossy comparison ──
+    println("\n=== Lossy Mode: Bit-width Comparison ===")
+    println("Bits | Compressed | Ratio  | Exact Match %")
+    println("-----|------------|--------|-------------")
+    for b in [1, 2, 3, 4, 6, 8]
+        tqt_tmp = base * ".tmp_b$(b).tqt"
+        out_tmp = base * ".tmp_b$(b).out"
+        try
+            compress_file(input_path, tqt_tmp; bit_width=b, dim=dim, lossless=false)
             decompress_file(tqt_tmp, out_tmp)
 
             orig = read(input_path)
@@ -88,7 +117,7 @@ function main()
             cs = filesize(tqt_tmp)
             ratio = round(orig_size / cs, digits=2)
 
-            println("  $b   | $(lpad(cs, 15)) | $(lpad(ratio, 5))× | $(pct)%")
+            println("  $b   | $(lpad(cs, 10)) | $(lpad(ratio, 5))× | $(pct)%")
         catch e
             println("  $b   | error: $e")
         finally
