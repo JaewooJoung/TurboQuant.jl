@@ -67,21 +67,27 @@ Compress any file into `.tqt` format and decompress it back:
 ```julia
 include("examples/tqt_file_io.jl")
 
-# Compress
-compress_file("myfile.txt", "myfile.tqt"; bit_width=4, dim=64)
-
-# Decompress
+# Lossless compression (default) — exact reconstruction guaranteed
+compress_file("myfile.txt", "myfile.tqt"; bit_width=4, dim=64, lossless=true)
 decompress_file("myfile.tqt", "myfile_restored.txt")
-
-# Verify reconstruction quality
 verify_roundtrip("myfile.txt", "myfile_restored.txt")
+# → Result: LOSSLESS (perfect reconstruction)
+
+# Lossy compression — smaller output, approximate reconstruction
+compress_file("myfile.txt", "myfile.tqt"; bit_width=4, dim=64, lossless=false)
 ```
+
+**How lossless mode works**: TurboQuant compresses the data with lossy vector
+quantization, then computes the byte-level residual (original - reconstructed)
+and stores it with RLE encoding. On decompression, the residual correction is
+added back for exact reconstruction. Higher `bit_width` means smaller residuals
+and thus better overall compression.
 
 ## Examples
 
 ### Run the Demo
 
-The demo compresses a sample text file and shows a bit-width comparison table:
+The demo shows both lossless and lossy comparisons across bit-widths:
 
 ```bash
 # Use built-in sample text
@@ -97,13 +103,19 @@ julia examples/example_compress.jl myfile.txt 6 128
 Example output:
 
 ```
-=== Bit-width Comparison ===
-Bits | Compressed Size | Ratio  | Exact Match %
------|-----------------|--------|-------------
-  1  |             ... |  ...×  | ~40%
-  2  |             ... |  ...×  | ~70%
-  4  |             ... |  ...×  | ~95%
-  8  |             ... |  ...×  | ~99%
+=== Lossless Mode: Bit-width Comparison ===
+Bits | Compressed | Ratio  | TQT part | Residual part | Exact?
+-----|------------|--------|----------|---------------|-------
+  1  |        ... |  ...×  |      ... |           ... | YES
+  4  |        ... |  ...×  |      ... |           ... | YES
+  8  |        ... |  ...×  |      ... |           ... | YES
+
+=== Lossy Mode: Bit-width Comparison ===
+Bits | Compressed | Ratio  | Exact Match %
+-----|------------|--------|-------------
+  1  |        ... |  ...×  | ~0.7%
+  4  |        ... |  ...×  | ~3.5%
+  8  |        ... |  ...×  | ~43.5%
 ```
 
 ### CLI Tool
@@ -111,17 +123,20 @@ Bits | Compressed Size | Ratio  | Exact Match %
 A standalone command-line tool for compress / decompress / inspect:
 
 ```bash
-# Compress a file
+# Lossless compression (default)
 julia examples/tqt_tool.jl compress input.png output.tqt 4 128
 
-# Decompress back
+# Lossy compression
+julia examples/tqt_tool.jl compress input.png output.tqt 2 64 --lossy
+
+# Decompress (auto-detects lossless/lossy from header)
 julia examples/tqt_tool.jl decompress output.tqt restored.png
 
 # Inspect a .tqt file header
 julia examples/tqt_tool.jl info output.tqt
 ```
 
-`info` output shows original size, vector dimensions, bit-width, codebook centroids, and effective bits-per-byte.
+`info` output shows mode (lossless/lossy), original size, vector dimensions, bit-width, codebook centroids, residual size, and effective bits-per-byte.
 
 ## Module Components
 
@@ -217,13 +232,14 @@ idx_mat, score_mat = batch_search(index, queries, k)
 recall = recall_at_k(index, queries, ground_truth, k)
 ```
 
-## .tqt File Format
+## .tqt File Format (v3)
 
-Binary layout:
+Binary layout with bit-packed indices:
 
 ```
-[Header]  37 bytes
-  Magic:          "TQT\x01"          (4 bytes)
+[Header]  38 bytes
+  Magic:          "TQT\x03"          (4 bytes)
+  Flags:          UInt8               (1 byte, bit 0 = lossless)
   Original size:  UInt64              (8 bytes)
   Dimension:      UInt32              (4 bytes)
   Bit-width:      UInt8               (1 byte)
@@ -236,9 +252,15 @@ Binary layout:
   Centroids:      Float64 × 2^b      (8 × 2^b bytes)
 
 [Data] × n_vectors
-  Norm:           Float64             (8 bytes)
-  Indices:        UInt8 × dim         (dim bytes)
+  Norm:           Float32             (4 bytes)
+  Indices:        ceil(dim×b/8) bytes (bit-packed, b bits per index)
+
+[Residual — lossless mode only]
+  Residual size:  UInt32              (4 bytes)
+  Residual data:  variable            (RLE-encoded zigzag residuals)
 ```
+
+**Storage math**: At `bit_width=2, dim=64`, each vector takes 4 (norm) + 16 (packed indices) = 20 bytes instead of the 72 bytes (8 + 64) in v2. For `bit_width=1`, it's just 4 + 8 = 12 bytes per vector.
 
 ## Distortion Performance
 
