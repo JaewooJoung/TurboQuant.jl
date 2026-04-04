@@ -14,7 +14,7 @@ A Julia implementation of advanced vector quantization based on [TurboQuant (arX
 ```julia
 # Clone the repository
 git clone https://github.com/JaewooJoung/TurboQuant.jl
-cd tqt
+cd TurboQuant.jl
 
 # Activate the project environment
 using Pkg
