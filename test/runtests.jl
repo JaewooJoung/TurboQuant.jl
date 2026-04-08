@@ -183,6 +183,10 @@ using TurboQuant
         for j in 1:N
             @test isapprox(norm(X_hat[:, j]), norm(X[:, j]), rtol=0.5)
         end
+        
+        x_single = randn(d)
+        comp_single = quantize(tq, x_single)
+        @test comp_single.n_vectors == 1
     end
 
     @testset "KV Cache: basic operations" begin
@@ -349,6 +353,24 @@ using TurboQuant
 
         mse = mean(sum((X .- X_hat).^2, dims=1)) / d
         @test mse < 0.5  # Should still work reasonably
+    end
+    
+    @testset "Prod Quantizer: inner_product_bias" begin
+        d = 32
+        N = 5
+        b = 3
+
+        tq = setup(TurboQuantProd, d, b; seed=UInt64(42))
+        X = randn(d, N)
+        y = randn(d)
+
+        mean_bias, std_bias = inner_product_bias(tq, X, y; n_trials=50)
+
+        @test length(mean_bias) == N
+        @test length(std_bias) == N
+        @test all(isfinite, mean_bias)
+        @test all(isfinite, std_bias)
+        @test all(std_bias .>= 0)
     end
 
 end
