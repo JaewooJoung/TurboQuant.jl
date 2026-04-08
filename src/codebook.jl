@@ -13,6 +13,9 @@ struct LloydMaxCodebook
     dimension::Int  # original vector dimension (affects Beta distribution shape)
 end
 
+# Use C standard library lgamma (available on all platforms)
+_lgamma(x::Float64) = ccall(:lgamma, Float64, (Float64,), x)
+
 """
     beta_pdf(x, d)
 
@@ -31,7 +34,7 @@ function beta_pdf(x::Float64, d::Int)
         return exp(-x^2 / (2σ²)) / sqrt(2π * σ²)
     end
     # Exact Beta distribution on [-1, 1]
-    log_norm = lgamma(d / 2.0) - 0.5 * log(π) - lgamma((d - 1) / 2.0)
+    log_norm = _lgamma(d / 2.0) - 0.5 * log(π) - _lgamma((d - 1) / 2.0)
     log_val = log_norm + ((d - 3) / 2.0) * log(max(1.0 - x^2, 1e-300))
     return exp(log_val)
 end

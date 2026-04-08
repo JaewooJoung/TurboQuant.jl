@@ -1,5 +1,9 @@
 # TurboQuant.jl
 
+[![CI](https://github.com/JaewooJoung/TurboQuant.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JaewooJoung/TurboQuant.jl/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/gh/JaewooJoung/TurboQuant.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JaewooJoung/TurboQuant.jl)
+[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://JaewooJoung.github.io/TurboQuant.jl/dev/)
+
 A Julia implementation of advanced vector quantization based on [TurboQuant (arXiv:2504.19874v1)](https://arxiv.org/abs/2504.19874v1). Achieves near information-theoretically optimal compression without any calibration data or codebook learning.
 
 ## Key Features
@@ -12,17 +16,11 @@ A Julia implementation of advanced vector quantization based on [TurboQuant (arX
 ## Installation
 
 ```julia
-# Clone the repository
-git clone https://github.com/JaewooJoung/TurboQuant.jl
-cd TurboQuant.jl
-
-# Activate the project environment
 using Pkg
-Pkg.activate(".")
-Pkg.instantiate()
+Pkg.add("TurboQuant")
 ```
 
-Or add it directly in Julia:
+Or install directly from the repository:
 
 ```julia
 using Pkg
@@ -273,8 +271,9 @@ Binary layout with bit-packed indices:
 
 ## Running Tests
 
-```bash
-julia test/runtests.jl
+```julia
+using Pkg
+Pkg.test("TurboQuant")
 ```
 
 ## Parameters Guide
