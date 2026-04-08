@@ -134,27 +134,22 @@ using TurboQuant
         d = 64
         N = 20
         b = 3
-
         tq = setup(TurboQuantProd, d, b; seed=UInt64(42))
         X = randn(d, N)
         y = randn(d)
-
         true_ip = X' * y
-
         # Average over multiple quantizations to check unbiasedness
-        n_trials = 200
+        n_trials = 500
         est_ips = zeros(N, n_trials)
         for t in 1:n_trials
             comp = quantize(tq, X)
             est_ips[:, t] .= inner_product(tq, comp, y)
         end
-
         mean_est = mean(est_ips, dims=2)[:]
-
-        # Mean estimated IP should be close to true IP (unbiased)
-        # Allow generous statistical tolerance due to high variance with QJL
+        std_est = std(est_ips, dims=2)[:] ./ sqrt(n_trials)
+        # Mean estimated IP should be within 4 standard errors of true IP
         for i in 1:N
-            @test isapprox(mean_est[i], true_ip[i], atol=abs(true_ip[i]) * 0.8 + 3.0)
+            @test abs(mean_est[i] - true_ip[i]) < max(4.0 * std_est[i], 2.0)
         end
     end
 
