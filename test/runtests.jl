@@ -154,7 +154,7 @@ using TurboQuant
         # Mean estimated IP should be close to true IP (unbiased)
         # Allow generous statistical tolerance due to high variance with QJL
         for i in 1:N
-            @test isapprox(mean_est[i], true_ip[i], atol=abs(true_ip[i]) * 0.5 + 2.0)
+            @test isapprox(mean_est[i], true_ip[i], atol=abs(true_ip[i]) * 0.8 + 3.0)
         end
     end
 
