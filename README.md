@@ -34,8 +34,7 @@ Pkg.add(url="https://github.com/JaewooJoung/TurboQuant.jl")
 ### Using the Module in Code
 
 ```julia
-include("src/TurboQuant.jl")
-using .TurboQuant
+using TurboQuant
 using LinearAlgebra
 
 # --- MSE Quantizer ---
