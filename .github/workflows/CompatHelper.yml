@@ -10,4 +10,4 @@ jobs:
   CompatHelper:
     runs-on: ubuntu-latest
     steps:
-      - uses: JuliaRegistries/CompatHelper.jl@v1
+      - uses: julia-actions/CompatHelper@v1
