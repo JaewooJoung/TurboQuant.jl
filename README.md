@@ -7,10 +7,7 @@
 [![Coverage](https://codecov.io/gh/JaewooJoung/TurboQuant.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JaewooJoung/TurboQuant.jl)
 [![License](https://img.shields.io/github/license/JaewooJoung/TurboQuant.jl)](https://github.com/JaewooJoung/TurboQuant.jl/blob/main/LICENSE)
 [![Julia](https://img.shields.io/badge/Julia-1.10%2B-blueviolet?logo=julia)](https://julialang.org/)
-[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
-[![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/JuliaDiff/BlueStyle)
-[![ColPrac](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
-[![GitHub Stars](https://img.shields.io/github/stars/JaewooJoung/TurboQuant.jl?style=social)](https://github.com/JaewooJoung/TurboQuant.jl)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/JaewooJoung/TurboQuant.jl)
 
 A Julia implementation of advanced vector quantization based on [TurboQuant (arXiv:2504.19874v1)](https://arxiv.org/abs/2504.19874v1). Achieves near information-theoretically optimal compression without any calibration data or codebook learning.
 
