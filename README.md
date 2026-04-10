@@ -2,7 +2,7 @@
 
 # TurboQuant.jl
 
-[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/JaewooJoung/TurboQuant.jl)
+[![JuliaHub](https://juliahub.com/docs/General/TurboQuant/stable/version.svg)]
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JaewooJoung.github.io/TurboQuant.jl/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JaewooJoung.github.io/TurboQuant.jl/dev)
 [![Build Status](https://github.com/JaewooJoung/TurboQuant.jl/workflows/CI/badge.svg)](https://github.com/JaewooJoung/TurboQuant.jl/actions)
