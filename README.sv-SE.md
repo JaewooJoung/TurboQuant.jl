@@ -1,15 +1,17 @@
-[English](README.md) | [한국어](README.ko-KR.md) | [Svenska](README.sv-SE.md) | [简体中文](README.zh-CN.md)
+[English](README.md) | [Español](README.es.md) | [한국어](README.ko-KR.md) | [Svenska](README.sv-SE.md) | [简体中文](README.zh-CN.md)
 
 # TurboQuant.jl
 
-[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](https://github.com/JaewooJoung/TurboQuant.jl)
+[![JuliaHub](https://juliahub.com/docs/General/TurboQuant/stable/version.svg)](https://juliahub.com/ui/Packages/General/TurboQuant)
+[![Julia](https://img.shields.io/badge/Julia-1.10%2B-blueviolet?logo=julia)](https://julialang.org/)
+[![pkgeval](https://juliahub.com/docs/General/TurboQuant/stable/pkgeval.svg)](https://juliahub.com/ui/Packages/General/TurboQuant)
+[![deps](https://juliahub.com/docs/General/TurboQuant/stable/deps.svg)](https://juliahub.com/ui/Packages/General/TurboQuant)
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JaewooJoung.github.io/TurboQuant.jl/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JaewooJoung.github.io/TurboQuant.jl/dev)
 [![Build Status](https://github.com/JaewooJoung/TurboQuant.jl/workflows/CI/badge.svg)](https://github.com/JaewooJoung/TurboQuant.jl/actions)
 [![Coverage](https://codecov.io/gh/JaewooJoung/TurboQuant.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JaewooJoung/TurboQuant.jl)
 [![License](https://img.shields.io/github/license/JaewooJoung/TurboQuant.jl)](https://github.com/JaewooJoung/TurboQuant.jl/blob/main/LICENSE)
-[![Julia](https://img.shields.io/badge/Julia-1.10%2B-blueviolet?logo=julia)](https://julialang.org/)
-
+[![Sponsor](https://img.shields.io/badge/Sponsor-PayPal-003087?logo=paypal&logoColor=white)](https://paypal.me/jaewoojoung)
 
 En Julia-implementation av avancerad vektorkvantisering baserad på [TurboQuant (arXiv:2504.19874v1)](https://arxiv.org/abs/2504.19874v1). Uppnår nära informationsteoretiskt optimal komprimering utan kalibrerings­data eller kodboksinlärning.
 
