@@ -11,7 +11,7 @@
 [![Build Status](https://github.com/JaewooJoung/TurboQuant.jl/workflows/CI/badge.svg)](https://github.com/JaewooJoung/TurboQuant.jl/actions)
 [![Coverage](https://codecov.io/gh/JaewooJoung/TurboQuant.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JaewooJoung/TurboQuant.jl)
 [![License](https://img.shields.io/github/license/JaewooJoung/TurboQuant.jl)](https://github.com/JaewooJoung/TurboQuant.jl/blob/main/LICENSE)
-
+[![Sponsor](https://img.shields.io/badge/Sponsor-PayPal-003087?logo=paypal&logoColor=white)](https://paypal.me/jaewoojoung)
 
 A Julia implementation of advanced vector quantization based on [TurboQuant (arXiv:2504.19874v1)](https://arxiv.org/abs/2504.19874v1). Achieves near information-theoretically optimal compression without any calibration data or codebook learning.
 
