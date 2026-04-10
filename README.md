@@ -1,4 +1,4 @@
-[English](README.md) | [한국어](README.ko-KR.md) | [Svenska](README.sv-SE.md) | [简体中文](README.zh-CN.md)
+[English](README.md) | [Español](README.es.md) | [한국어](README.ko-KR.md) | [Svenska](README.sv-SE.md) | [简体中文](README.zh-CN.md)
 
 # TurboQuant.jl
 
