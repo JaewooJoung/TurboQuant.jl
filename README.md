@@ -2,7 +2,7 @@
 
 # TurboQuant.jl
 
-[![JuliaHub](https://juliahub.com/docs/General/TurboQuant/stable/version.svg)
+[![JuliaHub](https://juliahub.com/docs/General/TurboQuant/stable/version.svg)](https://juliahub.com/ui/Packages/General/TurboQuant)
 [![Julia](https://img.shields.io/badge/Julia-1.10%2B-blueviolet?logo=julia)](https://julialang.org/)
 [![pkgeval](https://juliahub.com/docs/General/TurboQuant/stable/pkgeval.svg)](https://juliahub.com/ui/Packages/General/TurboQuant)
 [![deps](https://juliahub.com/docs/General/TurboQuant/stable/deps.svg)](https://juliahub.com/ui/Packages/General/TurboQuant)
